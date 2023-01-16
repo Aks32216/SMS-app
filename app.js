@@ -1,10 +1,18 @@
 const express=require("express");
-const nexmo=require("nexmo");
+const {Vonage} = require('@vonage/server-sdk');
 const bodyParser=require("body-parser");
 const ejs=require("ejs");
 const socketio=require("socket.io");
 const port=3000;
+const dotenv=require('dotenv');
+dotenv.config();
 
+// vonage setup
+
+const vonage = new Vonage({
+  apiKey: process.env.API_KEY,
+  apiSecret: process.env.API_SECRET
+})
 
 // init app
 
@@ -29,8 +37,19 @@ app.get('/',(req,res)=>{
 // post route
 
 app.post('/',(req,res)=>{
-    res.send(req.body);
-    console.log(req.body);
+    // res.send(req.body);
+    // console.log(req.body);
+    const from = "Vonage APIs";
+    const to = req.body.number;
+    const text =req.body.message;
+    console.log(to,' ',text);
+    async function sendSMS() {
+        await vonage.sms.send({to, from, text})
+            .then(resp => { console.log('Message sent successfully'); console.log(resp); })
+            .catch(err => { console.log('There was an error sending the messages.'); console.error(err); });
+    }
+    
+    sendSMS();
 })
 
 

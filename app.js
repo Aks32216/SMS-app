@@ -45,8 +45,20 @@ app.post('/',(req,res)=>{
     console.log(to,' ',text);
     async function sendSMS() {
         await vonage.sms.send({to, from, text})
-            .then(resp => { console.log('Message sent successfully'); console.log(resp); })
-            .catch(err => { console.log('There was an error sending the messages.'); console.error(err); });
+            .then(resp => { 
+                console.log('Message sent successfully'); 
+                const data={
+                    id:resp.messages[0]['message-id'],
+                    number:resp.messages[0]['to']
+                }
+                console.log(data);
+                io.emit('smsStatus',data);
+                console.log('emitted data');
+            })
+            .catch(err => { 
+                console.log('There was an error sending the messages.'); 
+                console.error(err); 
+            });
     }
     
     sendSMS();
@@ -55,4 +67,14 @@ app.post('/',(req,res)=>{
 
 const server=app.listen(port,()=>{
     console.log(`server started on ${port}`);
+})
+
+// connect to socket
+
+const io=socketio(server);
+io.on('connected',()=>{
+    console.log('connected');
+    io.on('disconnect',()=>{
+        console.log('disconnected');
+    })
 })

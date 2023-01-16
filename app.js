@@ -19,10 +19,18 @@ app.use(express.static(__dirname+'/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-// index route
+// index get route
 
 app.get('/',(req,res)=>{
     res.render('index');
+})
+
+
+// post route
+
+app.post('/',(req,res)=>{
+    res.send(req.body);
+    console.log(req.body);
 })
 
 

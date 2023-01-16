@@ -2,8 +2,19 @@
 <html lang="en">
 <head>
     <title>SMS application</title>
+    <link rel="stylesheet" type="text/css" href="/CSS/style.css">
 </head>
 <body>
-    <h1>send an SMS</h1>
+    <div class="main">
+        <div class="container">
+            <input class="inputSection" type="tel" name="number" id="number" placeholder="Enter Your Phone Number">
+            <input class="inputSection" type="text" name="message" id="message" placeholder="Enter the message">
+            <input class="buttonSection" type="button" id="button" value="Send Text">
+            <p class="response"></p>
+        </div>
+    </div>
+
+    <script src="/js/main.js"></script>
+    <script src="/socket.io/"></script>
 </body>
 </html>
